@@ -45,9 +45,21 @@ const deleteUser = async (req, res) => {
     console.log("errr", error);
   }
 };
+
+const updateUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    Object.assign(user, req.body);
+    await user.save();
+    res.send({ data: user });
+  } catch (error) {
+    res.status(404).send({ error: "user not found try again" });
+  }
+};
 module.exports = {
   createUser,
   getUsers,
   getUser,
   deleteUser,
+  updateUser,
 };
