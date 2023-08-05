@@ -1,5 +1,28 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const generateToken = require("../utils/generateToken");
+
+const authUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    const isMatch = user && (await bcrypt.compare(password, user.password));
+
+    if (user && isMatch) {
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user._id),
+      });
+      console.log("loginn succ");
+    } else {
+      return res.status(401).json("invalid email or password ");
+    }
+  } catch (error) {
+    console.log("errrrr", error);
+  }
+};
 const createUser = async (req, res) => {
   try {
     const user = new User(req.body);
@@ -77,4 +100,5 @@ module.exports = {
   getUser,
   deleteUser,
   updateUser,
+  authUser,
 };
