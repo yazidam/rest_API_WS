@@ -52,26 +52,22 @@ const updateUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     console.log("user", user);
-    // Object.assign(user, req.body);
     if (user) {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
       user.phone = req.body.phone || user.phone;
-
-      if (req.body.password && req.body.password != "") {
+      if (req.body.password) {
         user.password = await bcrypt.hash(req.body.password, 10);
       }
       const updateUser = await user.save();
       res.json({
         updateUser,
       });
-    } else {
-      res.status(404);
-      throw new Error("user not found");
+      console.log("updateUser", updateUser);
     }
     await user.save();
-    res.send({ data: user });
   } catch (error) {
+    console.log(error);
     res.status(404).send({ error: "user not found try again" });
   }
 };
