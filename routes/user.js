@@ -14,6 +14,6 @@ router.post("/add", userValidator, validate, createUser);
 router.get("/all", getUsers);
 router.get("/:id", getUser);
 router.delete("/:id", deleteUser);
-router.patch("/:id", userValidator, validate, updateUser);
+router.patch("/:id", updateUser);
 
 module.exports = router;
